@@ -19,4 +19,26 @@ router.get('/pending-researches', async (req, res) => {
   }
 });
 
+
+
+// Route to get pending researches uploaded by the current user
+router.get('/pending_researches/:userEmail', (req, res) => {
+  const { userEmail } = req.params;
+  const query = `
+    SELECT * 
+    FROM pending_researches 
+    WHERE email = ?;
+  `;
+  db.query(query, [userEmail], (err, result) => {
+    if (err) {
+      console.error('Error fetching pending researches:', err);
+      res.status(500).json({ error: 'Error fetching pending researches' });
+      return;
+    }
+    res.json(result);
+  });
+});
+
+
+
 module.exports = router;

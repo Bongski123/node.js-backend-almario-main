@@ -14,7 +14,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'ncfnexus',
+  database: 'nexus',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -228,7 +228,7 @@ const projectRoutes = require('./app/routes/ProjectRoutes');
 const researchesRoutes = require('./app/routes/Researches');
 const categoryRoutes = require('./app/routes/Category');
 const authorsRoutes = require('./app/routes/Authors');
-
+const verifyRoutes = require('./app/routes/userVerification');
 
 app.use('/api', UsersRoutes);
 app.use('/api', RolesRoutes);
@@ -241,6 +241,7 @@ app.use('/api', attachementRoutes);
 app.use('/api', researchesRoutes);
 app.use('/api', categoryRoutes);
 app.use('/', authorsRoutes);
+app.use('/', verifyRoutes);
 
 
 // Serve index page

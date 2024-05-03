@@ -102,6 +102,24 @@ router.get('/author/:id', (req, res) => {
 
 
 
+  router.get('/total_authors', (req, res) => {
+    const query = 'SELECT COUNT(*) AS total_authors FROM authors';
+    db.query(query, (err, result) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      const totalAuthors = result[0].total_authors;
+      res.json({ total_authors: totalAuthors });
+    });
+  });
+  
+
+
+
+
+
+
 //GET DETAILS OF 1 USER
 router.get('/department/:id', authenticateToken, (req, res)=> {
     let department_id =req.params.id;

@@ -182,6 +182,57 @@ router.get('/author/:email', (req, res)=> {
 
 
 
+//GET DETAILS OF 1 Document
+router.get('/author/:email/pending', (req, res)=> {
+    let researches_id =req.params.email;
+    if(!researches_id){
+        return res.status(400).send({ error: true, message: 'Please provide document_id'});
+    }
+
+    try{
+
+        db.query(`SELECT pr.id AS pending_research_id, 
+        pr.title AS research_title, 
+        pr.user_id, 
+        pr.publish_date, 
+        pr.abstract, 
+        d.department_name, -- Department name
+        c.category_name, -- Category name
+        pr.file_name, 
+        pr.created_at AS research_created_at,
+        'Pending' AS status,
+        u.user_id AS user_id, 
+        u.firstName, 
+        u.middleName, 
+        u.lastName, 
+        u.suffix, 
+        u.email, 
+        u.role_id
+ FROM pending_researches pr
+ JOIN users u ON pr.user_id = u.user_id
+ JOIN departments d ON pr.department_id = d.department_id -- Join with departments table
+ JOIN categories c ON pr.category_id = c.category_id -- Join with categories table
+ WHERE u.email = ?; -- Replace ? with the email of the user you want to retrieve data for
+ 
+
+ 
+    `, researches_id, (err, result)=>{
+
+            if(err){
+                console.error('Error fetcing items:', err);
+                res.status(500).json({message: 'Internal Server Error'});
+            }else{
+                res.status(200).json(result);
+            }
+        });
+    }catch (error){
+        console.error('Error loading user:', error);
+        res.status(200).json({ error: 'Internal Server Error'});
+    }
+});
+
+
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
